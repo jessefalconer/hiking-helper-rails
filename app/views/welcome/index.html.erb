@@ -1,0 +1,199 @@
+<%= javascript_include_tag('mapbase.js') %>
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-md-12 col-sm-12" id="header">
+      <span class="help" style="cursor:pointer" onclick="openHelp()">&#9432; Help</span>
+
+      <div class="alert-warning">
+        Heroku users: app may not work as intended at certain parts of the day due to throttling.
+        <span class="close-alert-btn" onclick="closeAlert()">&times;</span>
+      </div>
+
+      <span class="nerds" style="cursor:pointer" onclick="openNerds()">&int; &nbsp;Nerds</span>
+      <input id="pac-input" class="controls" type="text" placeholder="Find another location...">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2 col-sm-12" id="floating-panel">
+      <div class="input-container">
+
+        <input id="reset" onclick="reset();" type="button" value="Reset" class="waves-effect waves-light btn"/>
+        <input id="undo" onclick="undo();" type="button" value="Undo" class="waves-effect waves-light btn"/>
+
+    <div class="row">
+      <form class="switch-form">
+        <div class="col-md-12 col-sm-12">
+          <label class="switch">
+            <input type="checkbox">
+              <div class="slider">
+                <label id="metric">Metric &#x2713;</label>
+                <label id="imperial">Imperial &#x2713;</label>
+              </div>
+          </label>
+        </div>
+      </form>
+    </div>
+
+        <form id="user-form">
+          <label>Samples</label>
+            <input id="samples" class="user-input" name="samples" type="number" placeholder="Samples" defaultValue="300"/>
+          <label>Weight</label>
+            <input id="weight" class="user-input" name="weight" type="number" placeholder="kg"/>
+          <label>Pack Weight</label>
+          <input id="pack-weight" class="user-input" name="pack-weight" type="number" placeholder="kg"/>
+        </form>
+
+        <input onclick="plottingComplete();" type=button value="Generate" class="waves-effect waves-light btn" id="generate">
+
+        <form id='user-form-results'>
+          <label>Calories</label>
+          <div id="calories" class="results">&nbsp;</div>
+          <label>Absolute Distance</label>
+          <div id="distance" class="results">&nbsp;</div>
+          <label>Linear Distance</label>
+          <div id="map-distance" class="results">&nbsp;</div>
+          <label>Starting Elevation</label>
+          <div id="starting-elevation" class="results">&nbsp;</div>
+          <label>Finishing Elevation</label>
+          <div id="finishing-elevation" class="results">&nbsp;</div>
+          <label>Average Grade</label>
+          <div id="average-grade" class="results">&nbsp;</div>
+          <label>Elevation Gain</label>
+          <div id="elevation-gain" class="results">&nbsp;</div>
+          <label>Elevation Loss</label>
+          <div id="elevation-loss" class="results">&nbsp;</div>
+          <label>Path Efficiency</label>
+          <div id="path-efficiency" class="results">&nbsp;</div>
+          <label>Completion Time</label>
+          <div id="completion-time" class="results">&nbsp;</div>
+        </form>
+        <form id="results-estimate">
+          <label>Difficulty Estimate</label>
+          <div id="difficulty" class="results-estimate">&nbsp;</div>
+        </form>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-10 col-sm-12">
+      <div class="row" id="sub-header">
+
+        <div class="col-md-4 col-sm-4" id="realtime">
+              <label>Longitude</label>
+              <div id="instant-long" class="hud">&nbsp;</div>
+              <label>Latitude</label>
+              <div id="instant-lat" class="hud">&nbsp;</div>
+          </div>
+          <div class="col-md-4 col-sm-4" id="realtime">
+              <label>Elevation</label>
+              <div id="instant-elev" class="hud">&nbsp;</div>
+              <label>Distance Vector</label>
+              <div id="vector" class="hud">&nbsp;</div>
+          </div>
+          <div class="col-md-4 col-sm-4" id="realtime-heading">
+            <div class="realtime-container">
+              <label class="label-heading">Heading</label>
+              <div id="heading-degrees" class="div-hud-heading">&nbsp;</div>
+              <label class="label-degrees">°</label>
+              <div id="heading1" class="div-hud-heading-1">&nbsp;</div>
+              <label class="label-of">of</label>
+              <div id="heading2" class="div-hud-heading-1">&nbsp;</div>
+            </div>
+          </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12" id="map-canvas">
+          <div class="loader-container">
+            <div class="loader"></div>
+            <div class="loader-text"> &nbsp; Initializing map...
+            </div>
+          </div>
+          <div class="loader-container">
+            <div class="loader-1"></div><div class="loader-1-hidden">&#10060;</div>
+            <div class="loader-text-1"> &nbsp; Finding your location...
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 sm-12" id="elevation-chart">
+    </div>
+  </div>
+
+</div>
+<div id="helpSliderHeader" class="help-overlay-header">&nbsp;
+</div>
+<div id="helpSlider" class="help-overlay">
+<div class="help-overlay-content">
+  <h1>Welcome to Hiking Helper!</h1>
+  <h2>Hiking Helper allows you to draw lines on a map to get various information in order to help plan hikes and generates an elevation profile of your intended path. It also delivers real-time geographical data just by hovering with your cursor!</h2>
+  <div class="help-p-container">
+    <p>To begin, select your preferred units of measurement of either <strong>IMPERIAL</strong> or <strong>METRIC</strong>.</p>
+    <p>Next, select a <strong>SAMPLE</strong> size. This controls how precise Hiking Helper will perform it's calculations, and the resolution of the graph it generates. The higher the number, the more precise!</p>
+    <p>Finally, input your body <strong>WEIGHT</strong> and the load you will be carrying in <strong>PACK WEIGHT</strong>.</p>
+    <p>Now draw a few points to get started, and click <strong>GENERATE</strong> to finish. Enjoy!</p>
+  </div>
+
+</div>
+</div>
+<div id="nerdsSliderHeader" class="nerds-overlay-header">&nbsp;
+</div>
+<div id="nerdsSlider" class="nerds-overlay">
+<div class="nerds-overlay-content">
+  <h1>The Math</h1>
+  <h2>What's going on under the hood?</h2>
+  <div class="nerds-p-container">
+    <p>Concerning energy:<br>
+      $$Calories = \left|{Total Weight * g * Total Elevation Loss * a \over b}\right| + {Total Weight * g * Total Elevation Gain * a \over c} + y + z$$<br>
+      where $a = 0.000239006$, the conversion to calories from joules<br>
+      where $b = 0.3$, the human body's average mechanical efficiency while descending <a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1283673/">[source]</a><br>
+      where $c = 0.2$, the human body's average mechanical efficiency while ascending <a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1283673/">[source]</a><br>
+      where $g = 9.81$, acceleration due to gravity<br>
+      where $y = $ weight-determined walking metabolic rate $*$ linear distance travelled, the human body's average calories burned per kilometer of flat walking <a target="_blank" href="https://www.quora.com/How-many-calories-do-we-burn-walking-1-km">[source]</a><br>
+      and where $z = $ weight-determined basic metabolic rate $*$ estimated hike duration, energy required by the human body to sustain itself <a target="_blank" href="https://en.wikipedia.org/wiki/Harris%E2%80%93Benedict_equation">[source]</a>
+    </p>
+  </div>
+  <div class="nerds-p-container">
+    <p>
+      Concerning distance:<br>
+      $$AbsoluteDistance = \sum_{i=0}^{n-2} \sqrt{\biggl({\frac {Distance}{n}}\biggr)^2 + \bigl(Elevation[i+1]-Elevation[i]\bigr)^2}$$<br>
+      $AbsoluteDistance$ being the actual distance travelled over varying elevations and<br>
+      where $n=$ samples chosen by the user,<br>
+      where $Distance= LinearDistance$, the flat map distance and<br>
+      where $Elevation[i]=$ elevation at some index point.
+    </p>
+  </div>
+  <div class="nerds-p-container">
+    <p>
+      Concerning elevation:<br>
+      $$TotalElevationGained = \sum_{i=0}^{n-2} \bigl(Elevation[i+1]-Elevation[i]\bigr)$$ when $x\gt0$ and<br>
+      where $Elevation[i]=$ elevation at some index point.<br>
+      $$TotalElevationLost = \sum_{i=0}^{n-2} \bigl(Elevation[i+1]-Elevation[i]\bigr)$$ when $x\le0$ and<br>
+      where $Elevation[i]=$ elevation at some index point.
+      $$AverageGrade = \frac {Elevation_f - Elevation_i}{Distance} * 100$$
+      where $Elevation_f = Elevation[n-1]$, the final elevation point based on user-chose samples<br>
+      where $Elevation_i = Elevation[0]$, the initial elevation point and<br>
+      where $Distance= LinearDistance$, the flat map distance.
+    </p>
+  </div>
+  <div class="nerds-p-container">
+    <p>
+      Concerning efficiency:<br>
+      $$\eta = Efficiency = \frac {TotalElevationGained}{TotalElevationGained+\left|TotalElevationLost\right|} * 100$$
+      when $AverageGrade\gt0$.<br>
+      $$\eta = Efficiency = \frac {\left|TotalElevationLost\right|}{TotalElevationGained+\left|TotalElevationLost\right|} * 100$$
+      when $AverageGrade\le0$.<br><br>
+      Why is this useful? A route with a lower efficiency repeatedly gains and loses elevation, requiring more energy.
+    </p>
+  </div>
+
+</div>
+</div>
